@@ -28,7 +28,7 @@ def bot_login() -> praw.Reddit:
         client_secret=config.client_secret,
         user_agent='linux:freeararat:0.1.0 (by u/freeararat)',
     )
-    print('[*] Logged in')
+    print('[!] Logged in')
 
 
 def get_saved_comments() -> list:
@@ -66,14 +66,20 @@ def run() -> None:
     run_bot(REDDIT_CLIENT, comments)
 
 
+def handle_rate_limit(ex) -> None:
+    regex = re.findall(r'break for (\d+) (minutes|seconds) before', str(ex))
+    sleep_time, unit = int(regex[0][0]), regex[0][1]
+    print(f'[!] Rate limit exceeded, sleeping for {sleep_time} {unit}...')
+    time.sleep((60 if unit == 'minutes' else 1) * sleep_time)
+    comments = get_saved_comments()
+    try:
+        run_bot(REDDIT_CLIENT, comments)
+    except praw.exceptions.RedditAPIException as e:
+        handle_rate_limit(e)
+
+
 if __name__ == '__main__':
     try:
         run()
     except praw.exceptions.RedditAPIException as e:
-        sleep_time = int(re.findall(r'break for (\d) minute', str(e))[0])
-        print(f'[!] Rate limit exceeded, sleeping for {sleep_time} minutes...')
-        time.sleep(60 * sleep_time)  # 60s * sleep_time as minutes
-        if not REDDIT_CLIENT:
-            bot_login()
-        comments = get_saved_comments()
-        run_bot(REDDIT_CLIENT, comments)
+        handle_rate_limit(e)
