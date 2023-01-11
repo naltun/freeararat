@@ -21,6 +21,7 @@ async function handleRequest(request: Request): Promise<Response> {
        <body>
          <img src="indigenous-mountain.jpeg"
               alt="Protestors advocating for recognition of the cultural significance of Mount Ararat to the Armenian people" />
+         <p style="font-size: xx-small">Source code available <a href="https://github.com/naltun/freeararat">here</a>.</p>
        </body>
      </html>`,
     {
