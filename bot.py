@@ -58,6 +58,7 @@ def run_bot(reddit, comments_replied_to) -> None:
                 f.write(f'{comment.id}\n')
     print('[*] Search complete. Sleeping for 30 minutes...')
     time.sleep(60 * 30)  # 60s * 30m
+    run_bot(reddit, comments_replied_to)
 
 
 def run() -> None:
