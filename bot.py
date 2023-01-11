@@ -6,6 +6,7 @@ import re
 import time
 
 REDDIT_CLIENT = None
+TIME_TO_SLEEP = 10
 
 COMMENT_REPLY_BODY = '''
 Ararat is and remains Armenian. The Republic of Turkiye must recognize the cultural significance of
@@ -43,6 +44,7 @@ def get_saved_comments() -> list:
 
 
 def run_bot(reddit, comments_replied_to) -> None:
+    global TIME_TO_SLEEP
     print('[*] Searching last 500 comments...')
     for comment in reddit.subreddit('armenia').comments(limit=500):
         if (
@@ -56,8 +58,8 @@ def run_bot(reddit, comments_replied_to) -> None:
             comments_replied_to.append(comment.id)
             with open('comments_replied_to.txt', 'a') as f:
                 f.write(f'{comment.id}\n')
-    print('[*] Search complete. Sleeping for 30 minutes...')
-    time.sleep(60 * 30)  # 60s * 30m
+    print(f'[*] Search complete. Sleeping for {TIME_TO_SLEEP} minutes...')
+    time.sleep(60 * TIME_TO_SLEEP)  # 60s * TIME_TO_SLEEP as minutes
     run_bot(reddit, comments_replied_to)
 
 
