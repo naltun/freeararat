@@ -26,7 +26,7 @@ def bot_login() -> praw.Reddit:
         password=config.password,
         client_id=config.client_id,
         client_secret=config.client_secret,
-        user_agent='linux:freeararat:0.1.0 (by u/aScottishBoat)',
+        user_agent='linux:freeararat:0.1.0 (by u/freeararat)',
     )
     print('[*] Logged in')
 
